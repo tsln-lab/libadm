@@ -142,4 +142,10 @@ TEST_CASE("xml_parser/audio_block_format_objects_zone_errors") {
         "maxAzimuth=\"180\"/>"));
     REQUIRE_THROWS_AS(parseXml(xml), OutOfRangeError);
   }
+  SECTION("not a number") {
+    std::istringstream xml(objectsBlockWithZone(
+        "<zone minElevation=\"nan\" maxElevation=\"90\" minAzimuth=\"-180\" "
+        "maxAzimuth=\"180\"/>"));
+    REQUIRE_THROWS_AS(parseXml(xml), OutOfRangeError);
+  }
 }

@@ -1,4 +1,5 @@
 #include <catch2/catch.hpp>
+#include <limits>
 #include <sstream>
 #include "adm/elements/zone_exclusion.hpp"
 #include "helper/parameter_checks.hpp"
@@ -56,6 +57,8 @@ TEST_CASE("zone_exclusion/polar_zone") {
   SECTION("range") {
     REQUIRE_THROWS_AS(MinElevation{-91.f}, OutOfRangeError);
     REQUIRE_THROWS_AS(MaxAzimuth{181.f}, OutOfRangeError);
+    REQUIRE_THROWS_AS(MinAzimuth{std::numeric_limits<float>::quiet_NaN()},
+                      OutOfRangeError);
   }
 
   SECTION("print") {
