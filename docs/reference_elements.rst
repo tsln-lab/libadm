@@ -144,6 +144,22 @@ Objects
 .. doxygentypedef:: adm::JumpPositionFlag
 .. doxygentypedef:: adm::InterpolationLength
 .. doxygentypedef:: adm::ScreenRef
+.. doxygenclass:: adm::ZoneExclusion
+.. doxygentypedef:: adm::Zones
+.. doxygentypedef:: adm::Zone
+.. doxygenclass:: adm::CartesianZone
+.. doxygenclass:: adm::PolarZone
+.. doxygentypedef:: adm::ZoneLabel
+.. doxygentypedef:: adm::MinX
+.. doxygentypedef:: adm::MaxX
+.. doxygentypedef:: adm::MinY
+.. doxygentypedef:: adm::MaxY
+.. doxygentypedef:: adm::MinZ
+.. doxygentypedef:: adm::MaxZ
+.. doxygentypedef:: adm::MinElevation
+.. doxygentypedef:: adm::MaxElevation
+.. doxygentypedef:: adm::MinAzimuth
+.. doxygentypedef:: adm::MaxAzimuth
 
 HOA
 ~~~

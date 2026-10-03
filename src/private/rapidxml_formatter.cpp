@@ -542,7 +542,11 @@ namespace adm {
       node.addOptionalElement<HeadLocked>(&audioBlock, "headLocked");
       node.addOptionalElement<HeadphoneVirtualise>(&audioBlock, "headphoneVirtualise", &formatHeadphoneVirtualise);
       // clang-format on
-      // TODO: add zoneExclusion
+      // an empty zoneExclusion means the same as none: never written
+      if (audioBlock.get<ZoneExclusion>().has<Zones>()) {
+        node.addOptionalElement<ZoneExclusion>(&audioBlock, "zoneExclusion",
+                                               &formatZoneExclusion);
+      }
       node.addOptionalElement<Importance>(&audioBlock, "importance");
     }
 
@@ -622,6 +626,37 @@ namespace adm {
       node.addOptionalAttribute<AzimuthRange>(&objectDivergence, "azimuthRange");
       node.addOptionalAttribute<PositionRange>(&objectDivergence, "positionRange");
       node.setValue(objectDivergence.get<Divergence>());
+      // clang-format on
+    }
+
+    void formatZoneExclusion(XmlNode &node,
+                             const ZoneExclusion &zoneExclusion) {
+      node.addVectorElements<Zones>(&zoneExclusion, "zone", &formatZone);
+    }
+
+    void formatZone(XmlNode &node, const Zone &zone) {
+      // clang-format off
+      if (isCartesian(zone)) {
+        auto cartesianZone = boost::get<CartesianZone>(zone);
+        node.addAttribute<MinX>(&cartesianZone, "minX");
+        node.addAttribute<MaxX>(&cartesianZone, "maxX");
+        node.addAttribute<MinY>(&cartesianZone, "minY");
+        node.addAttribute<MaxY>(&cartesianZone, "maxY");
+        node.addAttribute<MinZ>(&cartesianZone, "minZ");
+        node.addAttribute<MaxZ>(&cartesianZone, "maxZ");
+        if (cartesianZone.has<ZoneLabel>()) {
+          node.setValue(cartesianZone.get<ZoneLabel>().get());
+        }
+      } else {
+        auto polarZone = boost::get<PolarZone>(zone);
+        node.addAttribute<MinElevation>(&polarZone, "minElevation");
+        node.addAttribute<MaxElevation>(&polarZone, "maxElevation");
+        node.addAttribute<MinAzimuth>(&polarZone, "minAzimuth");
+        node.addAttribute<MaxAzimuth>(&polarZone, "maxAzimuth");
+        if (polarZone.has<ZoneLabel>()) {
+          node.setValue(polarZone.get<ZoneLabel>().get());
+        }
+      }
       // clang-format on
     }
 

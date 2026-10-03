@@ -5,6 +5,7 @@
 ### Added
 - Added support for silent audioTrackUid references with ID 0. See `AudioTrackUid::isSilent` and `AudioTrackUid::getSilent`.
 - Added `audioFormatExtended` `version` attribute; this should be set for BS.2076-2 compliance: `document->set(Version("ITU-R_BS.2076-2"));`.
+- Added support for `zoneExclusion` in Objects `audioBlockFormat`, with Cartesian (`minX` ... `maxZ`) and polar (`minElevation`, `maxElevation`, `minAzimuth`, `maxAzimuth`, as per BS.2076-2) `zone` sub-elements. See `ZoneExclusion`, `CartesianZone` and `PolarZone`.
 
 ### Changed
 - Decimal times are now written without trailing zeros past 5 decimal places. To interoperate with ADM parsers which don't support more than 5 digits, users should round times in the ADM document before writing.

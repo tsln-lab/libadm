@@ -45,6 +45,7 @@ add_library(adm
   elements/label.cpp
   elements/loudness_metadata.cpp
   elements/object_divergence.cpp
+  elements/zone_exclusion.cpp
   elements/position.cpp
   elements/position_offset.cpp
   elements/position_interaction_range.cpp

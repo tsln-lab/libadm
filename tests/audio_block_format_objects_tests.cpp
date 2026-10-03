@@ -66,6 +66,16 @@ TEST_CASE("audio_block_format_objects_parameters") {
                                             hasDefaultOf(defaultDivergence),
                                             canBeSetTo(customDivergence));
   }
+  SECTION("ZoneExclusion") {
+    auto defaultZoneExclusion = ZoneExclusion{};
+    auto customZoneExclusion =
+        ZoneExclusion{Zones{PolarZone{MinElevation{-90.f}, MaxElevation{-30.f},
+                                      MinAzimuth{-180.f}, MaxAzimuth{180.f}}}};
+    check_defaulted_param<ZoneExclusion>(blockFormat,
+                                         hasDefaultOf(defaultZoneExclusion),
+                                         canBeSetTo(customZoneExclusion));
+  }
+
   SECTION("ObjectDivergence sub-elements") {
     auto objectDivergence = ObjectDivergence{};
     SECTION("Divergence") {

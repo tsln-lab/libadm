@@ -15,6 +15,7 @@ namespace adm {
     template class DefaultParameter<Height>;
     template class DefaultParameter<Depth>;
     template class DefaultParameter<Diffuse>;
+    template class DefaultParameter<ZoneExclusion>;
   }  // namespace detail
 
   // ---- Getter ---- //

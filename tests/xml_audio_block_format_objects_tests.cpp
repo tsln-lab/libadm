@@ -45,7 +45,25 @@ TEST_CASE("xml/audio_block_format_objects") {
       firstBlockFormat.get<JumpPosition>().get<InterpolationLength>().get() ==
       std::chrono::milliseconds(200));
   REQUIRE(firstBlockFormat.get<ScreenRef>() == true);
-  // TODO: add zoneExclusion test
+  auto zones = firstBlockFormat.get<ZoneExclusion>().get<Zones>();
+  REQUIRE(zones.size() == 2);
+  REQUIRE(isCartesian(zones[0]));
+  auto cartesianZone = boost::get<CartesianZone>(zones[0]);
+  REQUIRE(cartesianZone.get<MinX>() == Approx(-1.f));
+  REQUIRE(cartesianZone.get<MaxX>() == Approx(1.f));
+  REQUIRE(cartesianZone.get<MinY>() == Approx(-1.f));
+  REQUIRE(cartesianZone.get<MaxY>() == Approx(0.f));
+  REQUIRE(cartesianZone.get<MinZ>() == Approx(-1.f));
+  REQUIRE(cartesianZone.get<MaxZ>() == Approx(1.f));
+  REQUIRE(cartesianZone.has<ZoneLabel>());
+  REQUIRE(cartesianZone.get<ZoneLabel>() == "Rear");
+  REQUIRE(isPolar(zones[1]));
+  auto polarZone = boost::get<PolarZone>(zones[1]);
+  REQUIRE(polarZone.get<MinElevation>() == Approx(30.f));
+  REQUIRE(polarZone.get<MaxElevation>() == Approx(90.f));
+  REQUIRE(polarZone.get<MinAzimuth>() == Approx(-180.f));
+  REQUIRE(polarZone.get<MaxAzimuth>() == Approx(180.f));
+  REQUIRE(!polarZone.has<ZoneLabel>());
   REQUIRE(firstBlockFormat.get<Importance>() == 10);
   REQUIRE(firstBlockFormat.get<HeadphoneVirtualise>().get<Bypass>() == false);
   REQUIRE(firstBlockFormat.get<HeadphoneVirtualise>()
@@ -53,6 +71,8 @@ TEST_CASE("xml/audio_block_format_objects") {
   REQUIRE(firstBlockFormat.get<HeadLocked>() == false);
 
   auto secondBlockFormat = *blocksIter++;
+  REQUIRE(secondBlockFormat.isDefault<ZoneExclusion>());
+  REQUIRE(secondBlockFormat.get<ZoneExclusion>().get<Zones>().empty());
   REQUIRE(secondBlockFormat.get<ScreenRef>() == false);
   REQUIRE(secondBlockFormat.get<JumpPosition>().get<JumpPositionFlag>() ==
           false);
@@ -80,4 +100,46 @@ TEST_CASE("xml_parser/audio_block_format_objects_gain_unit_error") {
   REQUIRE_THROWS_AS(
       parseXml("xml_parser/audio_block_format_objects_gain_unit_error.xml"),
       error::XmlParsingUnexpectedAttrError);
+}
+
+namespace {
+  std::string objectsBlockWithZone(const std::string& zone) {
+    return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+           "<ebuCoreMain><coreMetadata><format><audioFormatExtended>"
+           "<audioChannelFormat audioChannelFormatID=\"AC_00031001\" "
+           "audioChannelFormatName=\"Zoned\" typeDefinition=\"Objects\">"
+           "<audioBlockFormat audioBlockFormatID=\"AB_00031001_00000001\">"
+           "<position coordinate=\"azimuth\">0.0</position>"
+           "<position coordinate=\"elevation\">0.0</position>"
+           "<zoneExclusion>" +
+           zone +
+           "</zoneExclusion>"
+           "</audioBlockFormat></audioChannelFormat>"
+           "</audioFormatExtended></format></coreMetadata></ebuCoreMain>";
+  }
+}  // namespace
+
+TEST_CASE("xml_parser/audio_block_format_objects_zone_errors") {
+  SECTION("both coordinate systems") {
+    std::istringstream xml(objectsBlockWithZone(
+        "<zone minX=\"-1\" maxX=\"1\" minY=\"-1\" maxY=\"1\" minZ=\"-1\" "
+        "maxZ=\"1\" minElevation=\"0\" maxElevation=\"90\" minAzimuth=\"-180\" "
+        "maxAzimuth=\"180\"/>"));
+    REQUIRE_THROWS_AS(parseXml(xml), error::XmlParsingError);
+  }
+  SECTION("no coordinates") {
+    std::istringstream xml(objectsBlockWithZone("<zone>Nowhere</zone>"));
+    REQUIRE_THROWS_AS(parseXml(xml), error::XmlParsingError);
+  }
+  SECTION("incomplete Cartesian zone") {
+    std::istringstream xml(objectsBlockWithZone(
+        "<zone minX=\"-1\" maxX=\"1\" minY=\"-1\" maxY=\"1\"/>"));
+    REQUIRE_THROWS(parseXml(xml));
+  }
+  SECTION("out of range") {
+    std::istringstream xml(objectsBlockWithZone(
+        "<zone minElevation=\"0\" maxElevation=\"91\" minAzimuth=\"-180\" "
+        "maxAzimuth=\"180\"/>"));
+    REQUIRE_THROWS_AS(parseXml(xml), OutOfRangeError);
+  }
 }
