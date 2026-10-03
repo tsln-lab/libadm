@@ -49,6 +49,21 @@ TEST_CASE("DirectSpeakers block format common subelements") {
   REQUIRE(blockFormat.get<Rtime>().get() == defaultRtime);
 }
 
+TEST_CASE("DirectSpeakers block format cartesian flag") {
+  using namespace adm;
+  AudioBlockFormatDirectSpeakers blockFormat;
+  REQUIRE(blockFormat.has<Cartesian>() == false);
+  blockFormat.set(Cartesian(true));
+  REQUIRE(blockFormat.has<Cartesian>() == true);
+  REQUIRE(blockFormat.get<Cartesian>() == true);
+  blockFormat.unset<Cartesian>();
+  REQUIRE(blockFormat.has<Cartesian>() == false);
+
+  AudioBlockFormatDirectSpeakers constructed(CartesianSpeakerPosition(),
+                                             Cartesian(true));
+  REQUIRE(constructed.get<Cartesian>() == true);
+}
+
 TEST_CASE("DirectSpeakers block format with Spherical coordinates") {
   using namespace adm;
   {

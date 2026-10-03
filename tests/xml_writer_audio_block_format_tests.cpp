@@ -67,7 +67,8 @@ TEST_CASE("Write fully specified DirectSpeakers block") {
                                  ZMax(0.6f),
                                  ScreenEdgeLock(HorizontalEdge("left"))},
         Rtime(std::chrono::seconds{1}), Duration(std::chrono::seconds{1}),
-        Gain::fromLinear(0.5), Importance{5}, HeadLocked{true});
+        Gain::fromLinear(0.5), Importance{5}, HeadLocked{true},
+        Cartesian{true});
     blockFormat.add(SpeakerLabel("testLabel"));
     channelFormat->add(blockFormat);
     auto xml = getXml(doc);

@@ -3,6 +3,12 @@
 #include <algorithm>
 
 namespace adm {
+  namespace detail {
+    template class OptionalParameter<Cartesian>;
+  }  // namespace detail
+}  // namespace adm
+
+namespace adm {
   namespace {
     const Rtime rtimeDefault{std::chrono::seconds(0)};
   }

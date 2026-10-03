@@ -64,6 +64,8 @@ TEST_CASE("xml_parser/audio_block_format_direct_speakers_cartesian") {
     auto speakerLabels = firstBlockFormat.get<SpeakerLabels>();
     REQUIRE(speakerLabels.size() == 1);
     REQUIRE(*speakerLabels.begin() == "testLabel");
+    REQUIRE(firstBlockFormat.has<Cartesian>());
+    REQUIRE(firstBlockFormat.get<Cartesian>() == true);
     auto speakerPosition = firstBlockFormat.get<CartesianSpeakerPosition>();
     REQUIRE(speakerPosition.get<X>() == Approx(0.0f));
     REQUIRE(speakerPosition.get<Y>() == Approx(0.0f));

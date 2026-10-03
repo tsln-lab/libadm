@@ -15,15 +15,12 @@
 #include "adm/export.h"
 #include "adm/elements/screen_ref.hpp"
 #include "adm/elements/zone_exclusion.hpp"
+#include "adm/elements/cartesian.hpp"
 
 namespace adm {
 
   class Document;
 
-  /// @brief Tag for NamedType ::Cartesian
-  struct CartesianTag {};
-  /// @brief NamedType for cartesian parameter
-  using Cartesian = detail::NamedType<bool, CartesianTag>;
   /// @brief Tag for NamedType ::Width
   struct WidthTag {};
   /// @brief NamedType for width parameter
