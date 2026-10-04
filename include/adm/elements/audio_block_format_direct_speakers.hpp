@@ -37,12 +37,10 @@ namespace adm {
     extern template class ADM_EXPORT_TEMPLATE_METHODS
         OptionalParameter<Cartesian>;
 
-    using AudioBlockFormatDirectSpeakersBase =
-        HasParameters<DefaultParameter<Gain>, DefaultParameter<HeadLocked>,
-                      DefaultParameter<HeadphoneVirtualise>,
-                      DefaultParameter<Importance>,
-                      OptionalParameter<InitializeBlock>,
-                      OptionalParameter<Cartesian>>;
+    using AudioBlockFormatDirectSpeakersBase = HasParameters<
+        DefaultParameter<Gain>, DefaultParameter<HeadLocked>,
+        DefaultParameter<HeadphoneVirtualise>, DefaultParameter<Importance>,
+        OptionalParameter<InitializeBlock>, OptionalParameter<Cartesian>>;
   }  // namespace detail
 
   /// @brief Tag for AudioBlockFormatDirectSpeakers

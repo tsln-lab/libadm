@@ -42,8 +42,8 @@ TEST_CASE("jump_position") {
 
 TEST_CASE("jump_position/format_interpolation_length") {
   using namespace adm;
-  REQUIRE(formatInterpolationLength(InterpolationLength(
-              std::chrono::seconds(0))) == "0.00000");
+  REQUIRE(formatInterpolationLength(
+              InterpolationLength(std::chrono::seconds(0))) == "0.00000");
   REQUIRE(formatInterpolationLength(InterpolationLength(
               std::chrono::milliseconds(1500))) == "1.50000");
   REQUIRE(formatInterpolationLength(InterpolationLength(
