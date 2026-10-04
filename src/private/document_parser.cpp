@@ -602,6 +602,7 @@ namespace adm {
       setOptionalAttribute<InitializeBlock>(node, "initializeBlock", audioBlockFormat);
       setMultiElement<SpeakerPosition>(node, "position", audioBlockFormat, &parseSpeakerPosition);
       addOptionalElements<SpeakerLabel>(node, "speakerLabel", audioBlockFormat, &parseSpeakerLabel);
+      setOptionalElement<Cartesian>(node, "cartesian", audioBlockFormat);
       setOptionalElement<HeadLocked>(node, "headLocked", audioBlockFormat);
       setOptionalElement<HeadphoneVirtualise>(node, "headphoneVirtualise", audioBlockFormat, &parseHeadphoneVirtualise);
       // clang-format on

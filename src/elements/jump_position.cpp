@@ -74,10 +74,23 @@ namespace adm {
   }
 
   std::string formatInterpolationLength(const InterpolationLength length) {
+    // seconds with five decimals, and up to nine when the value needs them
+    // (the Dolby Atmos Master ADM Profile's 0.005208 is not 0.00521)
+    auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(length.get())
+                  .count();
     std::stringstream ss;
-    ss << std::setprecision(5) << std::fixed
-       << std::chrono::duration_cast<std::chrono::duration<float>>(length.get())
-              .count();
+    if (ns < 0) {
+      ns = -ns;
+      ss << '-';
+    }
+    auto fraction = ns % 1000000000;
+    int precision = 9;
+    while (fraction % 10 == 0 && precision > 5) {
+      fraction /= 10;
+      precision--;
+    }
+    ss << ns / 1000000000 << '.' << std::setw(precision) << std::setfill('0')
+       << fraction;
     return ss.str();
   }
 

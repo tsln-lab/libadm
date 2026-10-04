@@ -5,6 +5,7 @@
 #include <boost/variant.hpp>
 #include "adm/elements/time.hpp"
 #include "adm/elements/audio_block_format_id.hpp"
+#include "adm/elements/cartesian.hpp"
 #include "adm/elements/common_parameters.hpp"
 #include "adm/elements/speaker_position.hpp"
 #include "adm/elements_fwd.hpp"
@@ -33,11 +34,13 @@ namespace adm {
   ADD_TRAIT(SpeakerPosition, SpeakerPostionTag);
 
   namespace detail {
-    using AudioBlockFormatDirectSpeakersBase =
-        HasParameters<DefaultParameter<Gain>, DefaultParameter<HeadLocked>,
-                      DefaultParameter<HeadphoneVirtualise>,
-                      DefaultParameter<Importance>,
-                      OptionalParameter<InitializeBlock>>;
+    extern template class ADM_EXPORT_TEMPLATE_METHODS
+        OptionalParameter<Cartesian>;
+
+    using AudioBlockFormatDirectSpeakersBase = HasParameters<
+        DefaultParameter<Gain>, DefaultParameter<HeadLocked>,
+        DefaultParameter<HeadphoneVirtualise>, DefaultParameter<Importance>,
+        OptionalParameter<InitializeBlock>, OptionalParameter<Cartesian>>;
   }  // namespace detail
 
   /// @brief Tag for AudioBlockFormatDirectSpeakers
@@ -81,6 +84,8 @@ namespace adm {
    * | headphoneVirtualise | :class:`HeadphoneVirtualise`       | :class:`DefaultParameter`  |
    * +---------------------+------------------------------------+----------------------------+
    * | speakerLabel        | :type:`SpeakerLabels`              | :class:`VectorParameter`   |
+   * +---------------------+------------------------------------+----------------------------+
+   * | cartesian           | :type:`Cartesian`                  | :class:`OptionalParameter` |
    * +---------------------+------------------------------------+----------------------------+
    * \endrst
    *

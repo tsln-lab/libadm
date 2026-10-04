@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_ENABLE_CHRONO_STRINGMAKER
 #include <catch2/catch.hpp>
 #include "adm/elements/audio_block_format_direct_speakers.hpp"
+#include "helper/parameter_checks.hpp"
 
 TEST_CASE("DirectSpeakers block format common subelements") {
   using namespace adm;
@@ -47,6 +48,17 @@ TEST_CASE("DirectSpeakers block format common subelements") {
   REQUIRE(blockFormat.isDefault<Rtime>() == true);
 
   REQUIRE(blockFormat.get<Rtime>().get() == defaultRtime);
+}
+
+TEST_CASE("DirectSpeakers block format cartesian flag") {
+  using namespace adm;
+  using namespace adm_test;
+  AudioBlockFormatDirectSpeakers blockFormat;
+  check_optional_param<Cartesian>(blockFormat, canBeSetTo(Cartesian(true)));
+
+  AudioBlockFormatDirectSpeakers constructed(CartesianSpeakerPosition(),
+                                             Cartesian(true));
+  REQUIRE(constructed.get<Cartesian>() == true);
 }
 
 TEST_CASE("DirectSpeakers block format with Spherical coordinates") {
