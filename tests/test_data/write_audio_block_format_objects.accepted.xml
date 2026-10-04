@@ -19,6 +19,10 @@
 						<screenRef>1</screenRef>
 						<headLocked>0</headLocked>
 						<headphoneVirtualise bypass="0" DRR="-60.000000"/>
+						<zoneExclusion>
+							<zone minX="-1.000000" maxX="1.000000" minY="-1.000000" maxY="0.000000" minZ="-1.000000" maxZ="1.000000">Rear</zone>
+							<zone minElevation="30.000000" maxElevation="90.000000" minAzimuth="-180.000000" maxAzimuth="180.000000"/>
+						</zoneExclusion>
 						<importance>10</importance>
 					</audioBlockFormat>
 					<audioBlockFormat audioBlockFormatID="AB_00031001_00000002">

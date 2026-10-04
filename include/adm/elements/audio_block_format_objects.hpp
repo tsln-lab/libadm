@@ -14,6 +14,7 @@
 #include "adm/detail/named_type.hpp"
 #include "adm/export.h"
 #include "adm/elements/screen_ref.hpp"
+#include "adm/elements/zone_exclusion.hpp"
 
 namespace adm {
 
@@ -49,6 +50,8 @@ namespace adm {
     extern template class ADM_EXPORT_TEMPLATE_METHODS DefaultParameter<Height>;
     extern template class ADM_EXPORT_TEMPLATE_METHODS DefaultParameter<Depth>;
     extern template class ADM_EXPORT_TEMPLATE_METHODS DefaultParameter<Diffuse>;
+    extern template class ADM_EXPORT_TEMPLATE_METHODS
+        DefaultParameter<ZoneExclusion>;
 
     using AudioBlockFormatObjectsBase = HasParameters<
         RequiredParameter<AudioBlockFormatId>, DefaultParameter<Rtime>,
@@ -57,7 +60,7 @@ namespace adm {
         DefaultParameter<Depth>, DefaultParameter<Diffuse>,
         DefaultParameter<Gain>, DefaultParameter<Importance>,
         DefaultParameter<HeadphoneVirtualise>, DefaultParameter<HeadLocked>,
-        DefaultParameter<ScreenRef>>;
+        DefaultParameter<ScreenRef>, DefaultParameter<ZoneExclusion>>;
   }  // namespace detail
 
   /**
@@ -118,15 +121,14 @@ namespace adm {
    * +---------------------+------------------------------+----------------------------+
    * | screenRef           | :type:`ScreenRef`            | :class:`DefaultParameter`  |
    * +---------------------+------------------------------+----------------------------+
+   * | zoneExclusion       | :class:`ZoneExclusion`       | :class:`DefaultParameter`  |
+   * +---------------------+------------------------------+----------------------------+
    *
    * ``cartesian`` and ``position`` attributes are linked; see :func:`void
    * set(Cartesian)`, :func:`void set(Position)`, :func:`void
    * set(CartesianPosition)` and :func:`void set(SphericalPosition)`.
    *
    * \endrst
-   *
-   * @warning This class has unsupported parameters
-   *   - ZoneExclusion
    */
   class AudioBlockFormatObjects : private detail::AudioBlockFormatObjectsBase {
    public:

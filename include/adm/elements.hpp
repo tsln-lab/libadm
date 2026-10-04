@@ -56,6 +56,7 @@
 #include "adm/elements/jump_position.hpp"
 #include "adm/elements/loudness_metadata.hpp"
 #include "adm/elements/object_divergence.hpp"
+#include "adm/elements/zone_exclusion.hpp"
 #include "adm/elements/position.hpp"
 #include "adm/elements/position_types.hpp"
 #include "adm/elements/screen_edge_lock.hpp"

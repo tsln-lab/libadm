@@ -90,6 +90,8 @@ namespace adm {
     void formatChannelLock(XmlNode &node, const ChannelLock &channelLock);
     void formatObjectDivergence(XmlNode &node,
                                 const ObjectDivergence &objectDivergence);
+    void formatZoneExclusion(XmlNode &node, const ZoneExclusion &zoneExclusion);
+    void formatZone(XmlNode &node, const Zone &zone);
     void formatJumpPosition(XmlNode &node, const JumpPosition &jumpPosition);
     void formatHeadphoneVirtualise(
         XmlNode &node, const HeadphoneVirtualise &headphoneVirtualise);

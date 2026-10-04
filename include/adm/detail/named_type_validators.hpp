@@ -49,7 +49,9 @@ namespace adm {
     struct RangeValidator {
       template <typename T>
       static void validate(const T& value) {
-        if (value > maxValue || value < minValue) {
+        // written as the inclusive test so that NaN, which compares false
+        // with everything, is rejected too
+        if (!(value >= minValue && value <= maxValue)) {
           std::stringstream msg;
           msg << "'" << value << "'" << " is not in range [" << minValue << ","
               << maxValue << "]";

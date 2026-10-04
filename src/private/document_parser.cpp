@@ -3,6 +3,7 @@
 #include "adm/private/xml_parser_helper.hpp"
 #include "adm/detail/named_type_validators.hpp"
 #include "adm/errors.hpp"
+#include <initializer_list>
 namespace adm {
   namespace xml {
 
@@ -792,6 +793,7 @@ namespace adm {
       setOptionalElement<Importance>(node, "importance", audioBlockFormat);
       setOptionalElement<HeadLocked>(node, "headLocked", audioBlockFormat);
       setOptionalElement<HeadphoneVirtualise>(node, "headphoneVirtualise", audioBlockFormat, &parseHeadphoneVirtualise);
+      setOptionalElement<ZoneExclusion>(node, "zoneExclusion", audioBlockFormat, &parseZoneExclusion);
       // clang-format on
       return audioBlockFormat;
     }
@@ -834,6 +836,52 @@ namespace adm {
       setOptionalAttribute<PositionRange>(node, "positionRange",
                                           objectDivergence);
       return objectDivergence;
+    }
+
+    ZoneExclusion parseZoneExclusion(NodePtr node) {
+      ZoneExclusion zoneExclusion;
+      addOptionalElements<Zone>(node, "zone", zoneExclusion, &parseZone);
+      return zoneExclusion;
+    }
+
+    Zone parseZone(NodePtr node) {
+      auto hasAnyAttribute = [node](std::initializer_list<const char*> names) {
+        for (auto name : names) {
+          if (node->first_attribute(name)) return true;
+        }
+        return false;
+      };
+      bool cartesian =
+          hasAnyAttribute({"minX", "maxX", "minY", "maxY", "minZ", "maxZ"});
+      bool polar = hasAnyAttribute(
+          {"minElevation", "maxElevation", "minAzimuth", "maxAzimuth"});
+      if (cartesian && polar) {
+        throw error::XmlParsingError(
+            "zone has both Cartesian and polar attributes",
+            getDocumentLine(node));
+      }
+      if (!cartesian && !polar) {
+        throw error::XmlParsingError(
+            "zone has neither Cartesian nor polar attributes",
+            getDocumentLine(node));
+      }
+      std::string label = node->value();
+      if (cartesian) {
+        CartesianZone zone(parseAttribute<MinX>(node, "minX"),
+                           parseAttribute<MaxX>(node, "maxX"),
+                           parseAttribute<MinY>(node, "minY"),
+                           parseAttribute<MaxY>(node, "maxY"),
+                           parseAttribute<MinZ>(node, "minZ"),
+                           parseAttribute<MaxZ>(node, "maxZ"));
+        if (!label.empty()) zone.set(ZoneLabel(label));
+        return zone;
+      }
+      PolarZone zone(parseAttribute<MinElevation>(node, "minElevation"),
+                     parseAttribute<MaxElevation>(node, "maxElevation"),
+                     parseAttribute<MinAzimuth>(node, "minAzimuth"),
+                     parseAttribute<MaxAzimuth>(node, "maxAzimuth"));
+      if (!label.empty()) zone.set(ZoneLabel(label));
+      return zone;
     }
 
     Frequency parseFrequency(std::vector<NodePtr> nodes) {

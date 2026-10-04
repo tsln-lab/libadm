@@ -51,6 +51,8 @@ namespace adm {
     Gain parseGain(NodePtr node);
     ChannelLock parseChannelLock(NodePtr node);
     ObjectDivergence parseObjectDivergence(NodePtr node);
+    ZoneExclusion parseZoneExclusion(NodePtr node);
+    Zone parseZone(NodePtr node);
     JumpPosition parseJumpPosition(NodePtr node);
     AudioBlockFormatDirectSpeakers parseAudioBlockFormatDirectSpeakers(
         NodePtr node, boost::optional<TimeReference> timeReference);
